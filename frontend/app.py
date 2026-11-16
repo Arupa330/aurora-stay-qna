@@ -81,7 +81,7 @@ response_type = st.radio(
 
 query = st.text_input(
     "Your question",
-    placeholder="e.g., What is the pet charge at ASH-CHI Loop?"
+    placeholder="e.g., What is the waiting period for hospitalization?"
 )
 
 
@@ -114,8 +114,7 @@ if st.button("Submit", type="primary"):
             with st.spinner("Thinking…"):
                 response = requests.post(
                     f"{BACKEND_URL}{endpoint}",
-                    json=payload,
-                    timeout=120
+                    json=payload
                 )
 
             if response.status_code == 200:
@@ -145,9 +144,8 @@ if st.button("Submit", type="primary"):
                     f"Status code: {response.status_code}"
                 )
 
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             st.error(
                 "Unable to connect to the RAG API. "
                 "Please make sure the backend service is running."
             )
-            st.caption(str(e))
