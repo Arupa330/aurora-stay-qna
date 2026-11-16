@@ -14,7 +14,6 @@ from rag_utils import retrieve, rag
 
 EMBED_MODEL = "HarishMaths/Hotel-Policy-Embedding"
 VECTORSTORE_PATH = "faiss_index"
-DEFAULT_MODEL = "openai/gpt-oss-20b"
 
 
 # ---------------------------------------------------------
@@ -114,9 +113,10 @@ def answer_with_relevant_chunks():
     {
         "query": "What is the cancellation policy?",
         "k": 3,
-        "model_name": "openai/gpt-oss-20b",
+        "model_name": "gpt-4o-mini",
         "temperature": 0.0,
-        "max_tokens": 500
+        "top_p": 1.0,
+        "max_tokens": 512
     }
 
     Returns both the generated answer and the relevant
@@ -129,7 +129,7 @@ def answer_with_relevant_chunks():
     # Extract parameters
     query = data["query"]
     k = data.get("k", 2)
-    model_name = data.get("model_name", DEFAULT_MODEL)
+    model_name = data.get("model_name", "gpt-4o-mini")
     temperature = data.get("temperature", 0.0)
     max_tokens = data.get("max_tokens", 500)
 
@@ -139,6 +139,7 @@ def answer_with_relevant_chunks():
         k=k,
         model_name=model_name,
         temperature=temperature,
+        top_p=top_p,
         max_tokens=max_tokens,
         vectorstore=vectorstore
     )
@@ -149,6 +150,7 @@ def answer_with_relevant_chunks():
         "k": k,
         "model_name": model_name,
         "temperature": temperature,
+        "top_p": top_p,
         "max_tokens": max_tokens,
         "relevant_chunks": chunks,
         "answer": answer
@@ -168,9 +170,10 @@ def answer():
     {
         "query": "What is the cancellation policy?",
         "k": 3,
-        "model_name": "openai/gpt-oss-20b",
+        "model_name": "gpt-4o-mini",
         "temperature": 0.0,
-        "max_tokens": 500
+        "top_p": 1.0,
+        "max_tokens": 512
     }
 
     Returns only the generated answer.
@@ -182,9 +185,10 @@ def answer():
     # Extract parameters
     query = data["query"]
     k = data.get("k", 2)
-    model_name = data.get("model_name", DEFAULT_MODEL)
+    model_name = data.get("model_name", "gpt-4o-mini")
     temperature = data.get("temperature", 0.0)
-    max_tokens = data.get("max_tokens", 500)
+    top_p = data.get("top_p", 1.0)
+    max_tokens = data.get("max_tokens", 512)
 
     # Run the complete RAG pipeline
     generated_answer, _ = rag(
@@ -192,6 +196,7 @@ def answer():
         k=k,
         model_name=model_name,
         temperature=temperature,
+        top_p=top_p,
         max_tokens=max_tokens,
         vectorstore=vectorstore
     )
